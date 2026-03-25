@@ -41,10 +41,10 @@ def open_camera():
                     print(f"Area of contour: {area}")
                         
             
-            new_detect = cv2.drawContours(image=frame, contours=contours, contourIdx=-1, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
+            detect_contours = cv2.drawContours(image=frame, contours=contours, contourIdx=-1, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
                 
             # flip the camera so its easier to test
-            flipped_frame = cv2.flip(new_detect, 1)
+            flipped_frame = cv2.flip(detect_contours, 1)
                     
                     
             cv2.imshow("Webcam", flipped_frame)
