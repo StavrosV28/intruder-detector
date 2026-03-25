@@ -44,10 +44,10 @@ def open_camera():
             detect_contours = cv2.drawContours(image=frame, contours=contours, contourIdx=-1, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
                 
             # flip the camera so its easier to test
-            flipped_frame = cv2.flip(detect_contours, 1)
+            flip_frame = cv2.flip(detect_contours, 1)
                     
                     
-            cv2.imshow("Webcam", flipped_frame)
+            cv2.imshow("Webcam", flip_frame)
             # Press q key to exit program
             if cv2.waitKey(1) == ord('q'):
                 break
