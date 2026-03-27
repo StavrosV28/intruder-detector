@@ -48,13 +48,30 @@ def open_camera():
                     motion_detected = True
                     print(f"Area of contour: {area}")
                     
+            # YOLO should happen every 10 frames when motion is confirmed
             if motion_detected and counter % 10 == 0:
                 results = model(frame)
-                print(results)
+                # Go through the results list to then filter out data we want
+                for rslts in results:
+                    boxes = rslts.boxes
+                    # Go through individual detections
+                    for box in boxes:
+                        coords = box.xyxy[0].tolist()
+                        # Take id from YOLO to then display name of object identified
+                        class_id_tensor = box.cls[0]
+                        class_id = int(class_id_tensor.item())
+                    
+                        # Find confidence interval from YOLOv8 
+                        confidence_tensor = box.conf[0]
+                        confidence = float(confidence_tensor.item())
+
+                        class_name = model.names[class_id]
+                    
+                        print(f'Detected object: {class_name}, Confidence: {confidence:.2f}, Coordinates: {coords}')
                     
             # detect_contours = cv2.drawContours(image=frame, contours=contours, contourIdx=-1, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
                 
-        frame = cv2.flip(frame, 1)    
+        frame = cv2.flip(frame, 1)
         cv2.imshow("Webcam", frame)
         # Press q key to exit program
         if cv2.waitKey(1) == ord('q'):
