@@ -1,5 +1,7 @@
 import cv2
 from ultralytics import YOLO
+from datetime import datetime
+
 
 
 
@@ -47,7 +49,10 @@ def open_camera():
                     cv2.drawContours(frame, [cnt], -1, (0,255,0), 2)
                     motion_detected = True
                     print(f"Area of contour: {area}")
-                    
+            
+            timestamp = datetime.now()
+            timestamp_formatted = timestamp.strftime("%Y-%m-%d %H:%M:%S")
+
             # YOLO should happen every 10 frames when motion is confirmed
             if motion_detected and counter % 10 == 0:
                 results = model(frame)
@@ -67,7 +72,7 @@ def open_camera():
 
                         class_name = model.names[class_id]
                     
-                        print(f'Detected object: {class_name}, Confidence: {confidence:.2f}, Coordinates: {coords}')
+                        print(f'Detected object: {class_name}, Timestamp: {timestamp_formatted}, Confidence: {confidence:.2f}, Coordinates: {coords}')
                     
             # detect_contours = cv2.drawContours(image=frame, contours=contours, contourIdx=-1, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
                 
