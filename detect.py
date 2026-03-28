@@ -76,8 +76,8 @@ def open_camera():
                     
                         print(f'Detected object: {class_name}, Timestamp: {timestamp_formatted}, Confidence: {confidence:.2f}, Coordinates: {coords}')
                         # Convert list of floats from coords into a string so that we can ingest into our db
-                        db_coords = ", ".join(str(c) for c in coords)                        
-                        insert_row(timestamp, class_name, confidence, db_coords)
+                        db_coords = ", ".join(str(round(c, 2)) for c in coords)                        
+                        insert_row(timestamp_formatted, class_name, round(confidence, 2), db_coords)
             # detect_contours = cv2.drawContours(image=frame, contours=contours, contourIdx=-1, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
                 
         frame = cv2.flip(frame, 1)
