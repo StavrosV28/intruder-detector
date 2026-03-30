@@ -57,8 +57,8 @@ def open_camera():
             timestamp = datetime.now()
             timestamp_formatted = timestamp.strftime("%Y-%m-%d %H:%M:%S")
 
-            # YOLO should happen every 10 frames when motion is confirmed
-            if motion_detected and counter % 10 == 0:
+            # YOLO should happen every 5 frames when motion is confirmed
+            if motion_detected and counter % 5 == 0:
                 results = model(frame)
                 # Go through the results list to then filter out data we want
                 for rslts in results:
