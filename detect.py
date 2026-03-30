@@ -64,6 +64,7 @@ def open_camera():
                     # Go through individual detections
                     for box in boxes:
                         coords = box.xyxy[0].tolist()
+                        cv2.rectangle(frame, (int(coords[0]), int(coords[1])), (int(coords[2]), int(coords[3])), (0, 255, 0), 2)
                         # Take id from YOLO to then display name of object identified
                         class_id_tensor = box.cls[0]
                         class_id = int(class_id_tensor.item())
