@@ -21,7 +21,9 @@ def open_camera():
     if not camera.isOpened():
         print('No Camera Detected.')
         exit()
-            
+    # Placeholder for drawing rectangle around movement
+    last_box = None
+    
     while True:
         ret, frame = camera.read()
         
@@ -64,7 +66,8 @@ def open_camera():
                     # Go through individual detections
                     for box in boxes:
                         coords = box.xyxy[0].tolist()
-                        cv2.rectangle(frame, (int(coords[0]), int(coords[1])), (int(coords[2]), int(coords[3])), (0, 255, 0), 2)
+                        # cv2.rectangle(frame, (int(coords[0]), int(coords[1])), (int(coords[2]), int(coords[3])), (0, 255, 0), 2)
+                        last_box = coords
                         # Take id from YOLO to then display name of object identified
                         class_id_tensor = box.cls[0]
                         class_id = int(class_id_tensor.item())
@@ -79,6 +82,9 @@ def open_camera():
                         # Convert list of floats from coords into a string so that we can ingest into our db
                         db_coords = ", ".join(str(round(c, 2)) for c in coords)                        
                         insert_row(timestamp_formatted, class_name, round(confidence, 2), db_coords)
+            # Rectangle around the detection will persist and be drawn around the movement detection        
+            if last_box is not None:
+                cv2.rectangle(frame, (int(last_box[0]), int(last_box[1])), (int(last_box[2]), int(last_box[3])), (0, 255, 0), 2)
             # detect_contours = cv2.drawContours(image=frame, contours=contours, contourIdx=-1, color=(0, 255, 0), thickness=2, lineType=cv2.LINE_AA)
                 
         frame = cv2.flip(frame, 1)
