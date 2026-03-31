@@ -67,7 +67,6 @@ def open_camera():
                     # Go through individual detections
                     for box in boxes:
                         coords = box.xyxy[0].tolist()
-                        # cv2.rectangle(frame, (int(coords[0]), int(coords[1])), (int(coords[2]), int(coords[3])), (0, 255, 0), 2)
 
                         # Take id from YOLO to then display name of object identified
                         class_id_tensor = box.cls[0]
@@ -90,7 +89,7 @@ def open_camera():
             # Rectangle around the detection will persist and be drawn around the movement detection        
             if last_box is not None:
                 cv2.rectangle(frame, (int(last_box[0]), int(last_box[1])), (int(last_box[2]), int(last_box[3])), (0, 255, 0), 2)
-                cv2.putText(frame, last_label, (int(last_box[0]), int(last_box[1]) - 10), cv2.FONT_HERSHEY_COMPLEX, 0.6, (0, 0, 0), 2)
+                cv2.putText(frame, last_label, (int(last_box[0]), int(last_box[1]) - 10), cv2.FONT_HERSHEY_COMPLEX, 0.6, (255, 255, 255), 2)
                 
                 
         cv2.imshow("Webcam", frame)
