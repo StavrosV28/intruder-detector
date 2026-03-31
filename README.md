@@ -10,3 +10,7 @@ This project detects, classifies, and logs whenever a person(intruder) is detect
 4. YOLO Classification - When motion clears the contour threshold, YOLOv8 (nano) runs inference on that frame. To avoid redundant processing, YOLO only runs every 5 frames during active motion. Detections under 70% confidence are ignored. Results are drawn on the frame and written to SQLite.
 
 - There is also a 200-frame warm-up period at startup that lets MOG2 learn the background before detection begins. Without this, the model would flag the entire initial scene as motion.
+
+## Future Improvements
+
+- Hook up script with Raspberry Pi and own camera lens to display and record for any detection
