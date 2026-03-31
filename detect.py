@@ -23,6 +23,7 @@ def open_camera():
         exit()
     # Placeholder for drawing rectangle around movement
     last_box = None
+    last_label = None
     
     while True:
         ret, frame = camera.read()
@@ -80,6 +81,8 @@ def open_camera():
                         # We only want to output when YOLO's conf interval is more 70 or more
                         if confidence >= .70:
                             last_box = coords
+                            last_label = f"{class_name} {confidence:.2f}"
+            
                             print(f'Detected object: {class_name}, Timestamp: {timestamp_formatted}, Confidence: {confidence:.2f}, Coordinates: {coords}')
                             # Convert list of floats from coords into a string so that we can ingest into our db
                             db_coords = ", ".join(str(round(c, 2)) for c in coords)                        
@@ -87,9 +90,9 @@ def open_camera():
             # Rectangle around the detection will persist and be drawn around the movement detection        
             if last_box is not None:
                 cv2.rectangle(frame, (int(last_box[0]), int(last_box[1])), (int(last_box[2]), int(last_box[3])), (0, 255, 0), 2)
+                cv2.putText(frame, last_label, (int(last_box[0]), int(last_box[1]) - 10), cv2.FONT_HERSHEY_COMPLEX, 0.6, (0, 0, 0), 2)
                 
                 
-        frame = cv2.flip(frame, 1)
         cv2.imshow("Webcam", frame)
         # Press q key to exit program
         if cv2.waitKey(1) == ord('q'):
