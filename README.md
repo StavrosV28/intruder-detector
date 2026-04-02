@@ -14,3 +14,5 @@ This project detects, classifies, and logs whenever a person(intruder) is detect
 ## Future Improvements
 
 - Hook up script with Raspberry Pi and own camera lens to display and record for any detection
+- Export data to CSV for data analysis
+- Add confidence trend visualization
