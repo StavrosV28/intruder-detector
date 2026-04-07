@@ -66,7 +66,7 @@ def open_camera():
                     boxes = rslts.boxes
                     # Go through individual detections
                     for box in boxes:
-                        coords = box.xyxy[0].tolist()
+                        coords = box.xyxy[0].tolist() 
 
                         # Take id from YOLO to then display name of object identified
                         class_id_tensor = box.cls[0]
@@ -78,7 +78,7 @@ def open_camera():
 
                         class_name = model.names[class_id]
                         # We only want to output when YOLO's conf interval is more 70 or more
-                        if confidence >= .70:
+                        if confidence >= .75:
                             last_box = coords
                             last_label = f"{class_name} {confidence:.2f}"
             
