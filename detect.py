@@ -51,9 +51,7 @@ def open_camera():
             for cnt in contours:
                 area = cv2.contourArea(cnt)
                 if area > 500:
-                    cv2.drawContours(frame, [cnt], -1, (0,255,0), 2)
                     motion_detected = True
-                    print(f"Area of contour: {area}")
             
             timestamp = datetime.now()
             timestamp_formatted = timestamp.strftime("%Y-%m-%d %H:%M:%S")
