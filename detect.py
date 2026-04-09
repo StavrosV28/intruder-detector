@@ -2,6 +2,7 @@ import cv2
 from ultralytics import YOLO
 from datetime import datetime
 from db import *
+from notifier import send_alert
 
 
 
@@ -53,12 +54,12 @@ def open_camera():
                 if area > 500:
                     motion_detected = True
             
-            timestamp = datetime.now()
-            timestamp_formatted = timestamp.strftime("%Y-%m-%d %H:%M:%S")
 
             # YOLO should happen every 5 frames when motion is confirmed
             if motion_detected and counter % 5 == 0:
                 results = model(frame)
+                timestamp = datetime.now()
+                timestamp_formatted = timestamp.strftime("%Y-%m-%d %H:%M:%S")
                 # Go through the results list to then filter out data we want
                 for rslts in results:
                     boxes = rslts.boxes
@@ -81,6 +82,8 @@ def open_camera():
                             last_label = f"{class_name} {confidence:.2f}"
             
                             print(f'Detected object: {class_name}, Timestamp: {timestamp_formatted}, Confidence: {confidence:.2f}, Coordinates: {coords}')
+                            # Notification gets sent to telegram app on users phone
+                            send_alert(f"Intruder Alert! \n Detected: {class_name} \n Time: {timestamp_formatted} \n Confidence: {(confidence * 100):.2f}%")
                             # Convert list of floats from coords into a string so that we can ingest into our db
                             db_coords = ", ".join(str(round(c, 2)) for c in coords)                        
                             insert_row(timestamp_formatted, class_name, round(confidence, 2), db_coords)
