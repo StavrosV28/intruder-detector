@@ -78,7 +78,7 @@ def open_camera():
 
                         class_name = model.names[class_id]
                         # We only want to output when YOLO's conf interval is more 70 or more
-                        if confidence >= .75:
+                        if confidence >= .75 and class_name == 'person':
                             last_box = coords
                             last_label = f"{class_name} {confidence:.2f}"
             
