@@ -24,3 +24,16 @@ def insert_row(timestamp, class_label, confidence_interval, coordinates):
                             coordinates) VALUES (?, ?, ?, ?)''', (timestamp, class_label, confidence_interval, coordinates))
         
         connection.commit()
+
+
+def get_detections_by_hour():
+    with sqlite3.connect("intruder-detector.db") as connection:
+        cursor = connection.cursor()
+        
+        cursor.execute('''SELECT COUNT(detection_id) as detection, strftime('%H', timestamp) as time
+                        FROM detections
+                        WHERE class_label = "person"
+                        GROUP BY strftime('%H', timestamp)''')
+        
+        rows = cursor.fetchall()
+        return rows
