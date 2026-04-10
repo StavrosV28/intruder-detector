@@ -25,6 +25,8 @@ def open_camera():
     # Placeholder for drawing rectangle around movement
     last_box = None
     last_label = None
+    # Used for providing a cooldown timer for messages sent to Telegram
+    last_alert_time = None
     
     while True:
         ret, frame = camera.read()
@@ -83,7 +85,9 @@ def open_camera():
             
                             print(f'Detected object: {class_name}, Timestamp: {timestamp_formatted}, Confidence: {confidence:.2f}, Coordinates: {coords}')
                             # Notification gets sent to telegram app on users phone
-                            send_alert(f"Intruder Alert! \n Detected: {class_name} \n Time: {timestamp_formatted} \n Confidence: {(confidence * 100):.2f}%")
+                            if last_alert_time is None or (datetime.now() - last_alert_time).seconds >= 5: 
+                                send_alert(f"Intruder Alert! \n Detected: {class_name} \n Time: {timestamp_formatted} \n Confidence: {(confidence * 100):.2f}%")
+                                last_alert_time = datetime.now()
                             # Convert list of floats from coords into a string so that we can ingest into our db
                             db_coords = ", ".join(str(round(c, 2)) for c in coords)                        
                             insert_row(timestamp_formatted, class_name, round(confidence, 2), db_coords)
