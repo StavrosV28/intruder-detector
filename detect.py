@@ -14,7 +14,7 @@ def open_camera():
     model = YOLO('yolov8n.pt')
     
     # Displays the webcam
-    camera = cv2.VideoCapture(0)
+    camera = cv2.VideoCapture(0, cv2.CAP_V4L2)
     
     # I added detect shadows to be true so we can differentiate a shadow from movement
     fgbg = cv2.createBackgroundSubtractorMOG2(history=100, varThreshold=200, detectShadows=True)
@@ -56,7 +56,6 @@ def open_camera():
                 if area > 500:
                     motion_detected = True
             
-
             # YOLO should happen every 5 frames when motion is confirmed
             if motion_detected and counter % 5 == 0:
                 results = model(frame)
