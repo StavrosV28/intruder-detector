@@ -102,16 +102,23 @@ def open_camera():
                 cv2.putText(frame, last_label, (int(last_box[0]), int(last_box[1]) - 10), cv2.FONT_HERSHEY_COMPLEX, 0.6, (255, 255, 255), 2)
                 
                 
-        cv2.imshow("Webcam", frame)
+        # cv2.imshow("Webcam", frame)
         # Press q key to exit program
-        if cv2.waitKey(1) == ord('q'):
-            break
-            
-        counter += 1
+        # if cv2.waitKey(1) == ord('q'):
+        #     break
+         
+        try:
+            while True:
+            # your existing loop code
+                counter += 1
+        except KeyboardInterrupt:
+            print("Stopping...")
+            camera.stop()   
+        # counter += 1
         
     # camera.release()
-    camera.stop()
-    cv2.destroyAllWindows()
+    
+    # cv2.destroyAllWindows()
 
 def main():
     open_camera()
