@@ -34,6 +34,7 @@ def open_camera():
     
     while True:
         frame = camera.capture_array()
+        print(f"Frame captured, counter: {counter}")
         
         bgr = cv2.cvtColor(frame, cv2.COLOR_RGBA2BGR)
         gray = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
