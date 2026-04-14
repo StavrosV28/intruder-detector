@@ -3,6 +3,7 @@ from ultralytics import YOLO
 from datetime import datetime
 from db import *
 from notifier import send_alert
+from picamera2 import Picamera2
 
 
 
@@ -14,7 +15,10 @@ def open_camera():
     model = YOLO('yolov8n.pt')
     
     # Displays the webcam
-    camera = cv2.VideoCapture(0, cv2.CAP_V4L2)
+    # camera = cv2.VideoCapture(0, cv2.CAP_V4L2)
+    camera = Picamera2()
+    camera.configure(camera.create_preview_configuration(main={"format": "XRGB8888", "size": (640, 480)}))
+    camera.start()
     
     # I added detect shadows to be true so we can differentiate a shadow from movement
     fgbg = cv2.createBackgroundSubtractorMOG2(history=100, varThreshold=200, detectShadows=True)
@@ -29,15 +33,15 @@ def open_camera():
     last_alert_time = None
     
     while True:
-        ret, frame = camera.read()
+        frame = camera.capture_array()
         
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        gray = cv2.cvtColor(frame, cv2.COLOR_RGBA2BGR)
         # threshold allows for us to determine what movement will be determined or converted to a white color in each frame
         _, thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY)
                 
-        if not ret:
-            print('No more stream')
-            break
+        # if not ret:
+        #     print('No more stream')
+        #     break
             
         # Apply the mask for the background subtractor
         fgmask = fgbg.apply(thresh)
