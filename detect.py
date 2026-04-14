@@ -23,9 +23,9 @@ def open_camera():
     # I added detect shadows to be true so we can differentiate a shadow from movement
     fgbg = cv2.createBackgroundSubtractorMOG2(history=100, varThreshold=200, detectShadows=True)
 
-    if not camera.isOpened():
-        print('No Camera Detected.')
-        exit()
+    # if not camera.isOpened():
+    #     print('No Camera Detected.')
+    #     exit()
     # Placeholder for drawing rectangle around movement
     last_box = None
     last_label = None
@@ -35,7 +35,9 @@ def open_camera():
     while True:
         frame = camera.capture_array()
         
-        gray = cv2.cvtColor(frame, cv2.COLOR_RGBA2BGR)
+        bgr = cv2.cvtColor(frame, cv2.COLOR_RGBA2BGR)
+        gray = cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)
+        
         # threshold allows for us to determine what movement will be determined or converted to a white color in each frame
         _, thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY)
                 
@@ -107,7 +109,8 @@ def open_camera():
             
         counter += 1
         
-    camera.release()
+    # camera.release()
+    camera.stop()
     cv2.destroyAllWindows()
 
 def main():
